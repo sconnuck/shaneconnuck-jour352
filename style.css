@@ -1,0 +1,33 @@
+styles for my resume
+body{
+    font-weight: 400
+}
+
+Name:
+
+title{
+    font-style: uppercase
+}
+
+Positions held:
+h3{
+    font-weight: 600;
+    font-size: 1.5em
+}
+
+Organizations at which I've worked:
+h4{
+    font-weight: 400;
+    font-size: 1.5em
+}
+
+Dates worked:
+h5{
+    font-weight: 400;
+    font-size: 1em
+}
+
+Contact info, skills, education:
+ul {
+    font-size: 1em;
+}
