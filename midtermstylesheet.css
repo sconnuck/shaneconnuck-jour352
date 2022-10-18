@@ -1,0 +1,32 @@
+body{
+    font-family: Helvetica, Arial, sans-serif;
+    font-size: 12px;
+}
+
+h1{
+    font-family: Garamond;
+    font-size: 36px;
+}
+
+/* This should be a comment in CSS */
+
+h3{
+    font-family: Garamond, serif;
+    font-size: 24px;
+}
+
+/* Adjust fonts, styles, etc., here in stylesheet. */
+
+#content{
+    text-align: center;
+}
+
+#byline{
+    font-size: 16px;
+}
+
+blockquote{
+    font-size: 30px;
+    font-style: italic;
+    color: red
+}
