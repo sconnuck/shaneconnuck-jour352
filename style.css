@@ -1,70 +1,31 @@
-styles for my resume
+
+
 body{
     font-weight: 400;
-    container: 100%;
-    max-width: 1200px;
-    text-align: 0 auto;
-    padding: 50px;
+    font-family: Tahoma;
 }
 
-Name:
 
 title{
     font-style: uppercase;
-    font-weight: 600px;
-    text-align: center;
-    margin: 20px 0px 0px 0px;
+    font-family: Tahoma;
 }
 
-h1{
-    border: 1px #33485e;
-    width: 60%;
-    min-width: 300px;
-    margin: 0 auto
-}
-
-h2{
-    margin: 10px 20px 0px 0px;
-    width: 70%;
-    min-width: 300px;
-}
-
-Positions held:
 h3{
     font-weight: 600;
     font-size: 1.5em
 }
 
-Organizations at which I've worked:
 h4{
     font-weight: 400;
-    font-size: 1.25em
+    font-size: 1.5em
 }
 
-Dates worked:
 h5{
     font-weight: 400;
-    font-size: 1em;
-    margin: 2px 0px 0px 0px;
+    font-size: 1em
 }
 
-Description:
-p{
-    margin: 10px 10px 0px 0px;
-}
-
-menu{
-    display: inline;
-}
-
-Contact info, skills, education:
 ul {
     font-size: 1em;
-    margin: 5px 0px 0px 0px;
-}
-
-top{
-    width: 60%;
-    min-width: 300px;
-    margin:0 auto 30px;
 }
