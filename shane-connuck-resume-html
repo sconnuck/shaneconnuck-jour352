@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+    <head>
+    <link rel="stylesheet" href="style.css"></link>
+    <img src = "pagetopper.png"></img>
+    <title><strong>"Shane Connuck Resume"</strong>></title>
+    <style>
+        h1 {
+            font-size: 36px;
+            color: #444;
+        }
+    </style>
+    </head>
+    <body style="background-color:crimson;">
+        <!-- I built this myself! -->
+        <p>I am a versatile sports broadcaster and journalist graduating from the Philip Merrill College of Journalism at the University of Maryland this spring. I am currently a high school sports reporter for The Washington Post, have hosted and reported for television shows that have aired on regional Bally Sports networks and local news stations and performed play-by-play commentary for national broadcasts.</p>               
+        <img src = 147A0363.JPG></img>
+        <h2>Recent accomplishments:</h2>               
+        <h3>Receiving more than 10,000 page views in one day on an<a href="https://www.washingtonpost.com/sports/2022/02/17/st-johns-wrestling-tried-welcome-girl-its-team-this-season-school-said-no/">
+            <article>
+                article
+            </article>
+        </a></h3> 
+        
+        <h3>Hosting/producing a show every day this summer</h3>       
+        <h3>Broadcasting multiple high school football national games of the week this fall</h3>
+    <img src = "IMG_3291.jpeg"></img>
+    <p>From the play-by-play headset to the stats table to the writers' press box to reporting on the sidelines, I've worked in nearly every area of sports media.</p>
+    <iframe width="560" height="315" src="https://www.youtube.com/embed/oSKgn88CYYs" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+    <iframe width="560" height="315" src="https://www.youtube.com/embed/ZWC7yae889w" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+    <iframe width="560" height="315" src="https://www.youtube.com/embed/7nYOr9O8fVQ" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+    <h2>Get in touch!</h2>
+<!-- Add icon library -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+<!-- Add font awesome icons -->
+<a href="https://twitter.com/shane_connuck" class="fa fa-twitter"></a>
+<a href="https://www.instagram.com/shaneconnucksports/" class="fa fa-instagram"></a>
+...
