@@ -1,0 +1,66 @@
+body{
+    text-align: center;
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    background-color: lightsalmon;
+    text-anchor: orange;
+}
+
+h1{
+    text-align: center;
+    font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+    margin-left: 200px;
+    margin-right: 200px;
+}
+
+h2{
+    margin-left: 200px;
+    margin-right: 200px;
+}
+
+p{
+    align-content: center;
+    margin-left: 200px;
+    margin-right: 200px;
+}
+
+h3{
+    margin-left:400px;
+    margin-right: 400px;
+}
+
+blockquote {
+    font: 40px Impact, sans-serif; 
+    margin-top: 15px; 
+    margin-bottom: 15px; 
+    color: blue; 
+    margin-left: 50px; 
+    padding-left: 15px; 
+    border-left: 4px solid #ccc; 
+    } 
+
+
+/* Define the main Navigation block */
+.myNav {
+    display: block;
+    height: 50px;
+    line-height: 50px;
+    background-color: orange;
+    font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+    color: orange;
+    align-items: center;
+}
+/* Remove bullets, margin and padding */
+.myNav ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+.myNav li {
+    float: left;
+    /* Or you can use display: inline; */
+}
+/* Define the block styling for the links */
+.myNav li a {
+    display: inline-block;
+    text-align: center;
+    padding: 14px 16px;
