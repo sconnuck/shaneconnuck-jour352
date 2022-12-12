@@ -1,0 +1,385 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+```{r}
+library(tidyverse)
+library(ggrepel)
+library(ggplot2)
+```
+
+
+```{r}
+football <- read_csv("https://dwillis.github.io/sports-data-files/footballlogs22.csv")
+```
+
+```{r}
+football21 <- read_csv("https://dwillis.github.io/sports-data-files/footballlogs21.csv")
+```
+
+
+
+Throughout the back end of the summer, I was getting excited about the Terrapins ahead of my senior year. Michael Locksley, who took over as head coach entering my first year on campus, seemed to be bringing a very good unit into a dominant Big Ten Conference. Its solid returning quarterback, Taulia Tagovailoa, actually had one of the "best receiving corps in the nation" with which to work.
+
+But how far can that take Maryland -- still a newcomer to the football-heavy conference largely consisting of Midwestern state schools -- on the heels of a 7-6 campaign that is being dubbed as its best in over a decade?
+
+Well, that question has been answered. With whatever additions joined Locksley's squad, the Terps won just one more game than they did last regular season.
+
+And it's being viewed largely as a success -- they're going "bowling" in back-to-back seasons and played No. 2 Ohio State and No. 4 Michigan close. But they were still haunted by midseason heartbreaks and unexpected blowouts at the hands of schools among the likes of Purdue, Penn State and Wisconsin.
+
+Nobody ever said it was Maryland's defense that was going to put it over the edge in the Big Ten this year -- games like the early-season Saturday night SMU battle were just expected to be shootouts. But an offense featuring a passer like Tagovailoa with weapons like receivers Rakim Jarrett, Dontay Demus Jr., Florida transfer Jacob Copeland and Jeshaun Jones -- not to mention freshman phenom running back Roman Hemby -- was primed to put up some numbers. But let's see how many they really did.
+
+```{r}
+bigten <- football %>% filter(Conference == "Big Ten Conference")
+```
+
+Let's start here. The team that wins a football game is the one that puts more points on the board. The teams that are "better" usually beat opponents by greater margins. Yeah, teams can have inflated numbers from early-season matchups against mid-major schools, but I still think putting up points is usually a token of reward to a team's offense (or defense).
+
+```{r}
+points <- bigten %>% 
+  group_by(Team) %>% 
+  summarise(
+    SeasonPoints = sum(TeamScore)
+    ) 
+```
+
+```{r}
+ggplot() + 
+  geom_bar(data=points, aes(x=reorder(Team, SeasonPoints), weight=SeasonPoints)) + 
+  coord_flip() +
+  labs(title = "The Big Ten teams that scored the most", subtitle = "Maryland's offense put up the fifth-most points in the conference.", caption = "Source: NCAA | By Shane Connuck") + theme_minimal() + 
+  theme(
+    plot.title = element_text(size = 16, face = "bold"),
+    axis.title = element_text(size = 8), 
+    plot.subtitle = element_text(size=10), 
+    panel.grid.minor = element_blank()
+    )
+```
+Ohio State and Michigan at the top, Rutgers and Northwestern at the bottom. That would be clear to most who watched Big Ten football this year, and that's how it checked out on the scoreboard.
+
+But in between the College Football Playoff contenders and this year's worst squads, Maryland finds itself finishing with just 15 fewer points than Purdue, which won the Big Ten West and edged the Terps in a heartbreaker this fall. The Terrapins' lowly offensive performances against Wisconsin and Penn State clearly hurt them in this category.
+
+That said, Maryland only mustered 10 points in its blowout loss in Madison, Wis., and none the following week in its shutout at the Happy Valley. Last year's chart is down below. It's similar, with Ohio State and Michigan still out in front, but Maryland actually scored 31 fewer points than it did last year. However, let's keep in mind that last year's stats might include a 54-point performance in a bowl game for the Terps. 
+
+```{r}
+bigten21 <- football21 %>% filter(Conference == "Big Ten Conference")
+```
+```{r}
+points21 <- bigten21 %>% 
+  group_by(Team) %>% 
+  summarise(
+    SeasonPoints = sum(TeamScore)
+    ) 
+```
+
+
+```{r}
+ggplot() + 
+  geom_bar(data=points21, aes(x=reorder(Team, SeasonPoints), weight=SeasonPoints)) + 
+  coord_flip() +
+  labs(title = "Last year's highest-scoring Big Ten teams", subtitle = "Maryland finished fourth.", caption = "Source: NCAA | By Shane Connuck") + 
+  theme_minimal() + 
+  theme(
+    plot.title = element_text(size = 16, face = "bold"),
+    axis.title = element_text(size = 8), 
+    plot.subtitle = element_text(size=10), 
+    panel.grid.minor = element_blank()
+  )
+```
+
+Let's just exclude all bowl games. Looks like that would be done if remove Games 13 (which, unfortunately, will be the Big Ten championship game for Michigan and Iowa, but let's just consider that another postseason game) and 14.
+
+```{r}
+bigten21wobowls <- bigten21 %>% 
+  filter(Game < 13)
+```
+```{r}
+points21wobowls <- bigten21wobowls %>% 
+  group_by(Team) %>% 
+   summarise(
+    SeasonPoints = sum(TeamScore)
+    ) 
+```
+
+```{r}
+ggplot() + 
+  geom_bar(data=points21wobowls, aes(x=reorder(Team, SeasonPoints), weight=SeasonPoints)) + 
+  coord_flip() +
+  labs(title = "The Pinstripe Bowl helped Maryland's numbers!", subtitle = "Maryland actually finished sixth in scoring in the regular season. Even Nebraska scored more", caption = "Source: NCAA | By Shane Connuck") + 
+  theme_minimal() + 
+  theme(
+    plot.title = element_text(size = 16, face = "bold"),
+    axis.title = element_text(size = 8), 
+    plot.subtitle = element_text(size=10), 
+    panel.grid.minor = element_blank()
+  )
+```
+
+There we go. Clearly, Ohio State and Michigan are just head and shoulders above the league, as they're still on top even removing one or two extra games from their schedules last year.
+
+--
+
+What if Maryland's two outlier performances, against Wisconsin and Penn State, didn't contribute to their points total? Let's draw the line there and see how Big Ten teams fared this year if we don’t count performances where they scored fewer than 11 points..
+
+```{r}
+bigtenscores <- football %>% 
+  group_by(Team, TeamScore, OpponentScore) %>% 
+  filter(Conference == "Big Ten Conference") 
+```
+
+```{r}
+points_over11 <- bigtenscores %>% 
+  filter(!TeamScore < 11) %>% 
+  group_by(Team) %>% 
+  summarise(SeasonPoints = sum(TeamScore))
+```
+
+```{r}
+ggplot() + 
+  geom_bar(data=points_over11, aes(x=reorder(Team, SeasonPoints), weight=SeasonPoints)) + 
+  coord_flip() +
+  labs(title = "Excluding games where they didn't score at least 11...", subtitle = "Not much movement here. Maryland essentially just lost 10 points.", caption = "Source: NCAA | By Shane Connuck") + theme_minimal() + 
+  theme(
+    plot.title = element_text(size = 16, face = "bold"),
+    axis.title = element_text(size = 8), 
+    plot.subtitle = element_text(size=10), 
+    panel.grid.minor = element_blank()
+    )
+```
+
+So ... this actually wasn't the best way to look at this. All this does is remove Maryland's scoreless effort against Penn State and its 10 points against the Badgers, which means Maryland's points total is 340 instead of 350. Not many of the other teams' totals changed either.
+
+Let's look at margin of victory instead.
+
+```{r}
+bigtenmargins <- bigten %>% 
+  mutate(MarginOfVictory = TeamScore-OpponentScore)
+```
+
+```{r}
+bigtenmargins %>% summarise(mean(MarginOfVictory))
+```
+This means that the average margin of victory -- including negative margins that signify losses for those teams -- among Big Ten teams this year is 5.14. 
+
+```{r}
+bigtenmargins %>% summary(MarginOfVictory)
+```
+
+The biggest margin of victory in a game featuring a Big Ten team is 59, from Michigan's 59-0 win over Connecticut, Rutgers' 66-7 victory over Wagner and Wisconsin's 66-7 decision against New Mexico State. The worst loss for a Big Ten team was Rutgers' 55-10 loss against Penn State. At home, too. Yikes. Big Ten country wasn't in Piscataway packed into the iconic SHI Stadium to cheer on the Scarlet Knights?
+
+```{r}
+bigtenmargins %>% filter(MarginOfVictory == 59)
+```
+
+
+```{r}
+bigtenmargins %>% filter(MarginOfVictory == -45)
+```
+
+```{r}
+mdmarginshere <- bigtenmargins %>% 
+  filter(Team == "Maryland") %>% 
+  select(MarginOfVictory, Opponent, Result)
+```
+
+There we go. Maryland's greatest margin of victory was its 37-0 shutout of Rutgers in the regular season finale and its worst was the 30-0 beatdown at Penn State. Northeast Big Ten football, baby!
+
+While it felt like the Terrapins were blown out at Camp Randall Stadium this year, they only ended up losing by 13 points. That's the same margin by which it ended up falling in Maryland's "really good game" against No. 2 Ohio State. 
+
+Let's look at these teams with their average margins of victory this year.
+
+```{r}
+averagemargins <- bigtenmargins %>% 
+  group_by(Team) %>% 
+  summarise(avg = mean(MarginOfVictory))
+```
+
+```{r}
+ggplot() + 
+  geom_bar(data=averagemargins, aes(x=reorder(Team, avg), weight=avg))  + 
+  scale_fill_manual(values = c("Maryland" = "red"), guide = "none")+
+  coord_flip() +
+  labs(title = "Maryland's seven-point loss to Michigan is an outlier", subtitle = "The unbeaten Wolverines lead the Big Ten with an average margin of victory of 26.69 points.", caption = "Source: NCAA | By Shane Connuck") + 
+  theme_minimal() + 
+  theme(
+    plot.title = element_text(size = 16, face = "bold"),
+    axis.title = element_text(size = 8), 
+    plot.subtitle = element_text(size=10), 
+    panel.grid.minor = element_blank()
+  )
+```
+
+Not only has Michigan won all of its games -- it's done so by an average of nearly 27 points. That makes Maryland's seven-point loss to the Wolverines look even better.
+
+The only problem with this margin of victory stat I've created is that it includes all games, including those that weren't victories. Because of that, every team except Michigan has negative margins of victory included. Let's see how this looks if the margins of victory only include victories.
+
+```{r}
+bigtenmarginsabovezero <- bigtenmargins %>% 
+  filter(MarginOfVictory > 0) %>% 
+  group_by(Team) 
+```
+
+```{r}
+avgmarginsabovezero <- bigtenmarginsabovezero %>% 
+  group_by(Team) %>% 
+  summarise(avg = mean(MarginOfVictory))
+```
+```{r}
+ggplot() + 
+  geom_bar(data=avgmarginsabovezero, aes(x=reorder(Team, avg), weight=avg))  + 
+  scale_fill_manual(values = c("Maryland" = "red"), guide = "none")+
+  coord_flip() +
+  labs(title = "Six Big Ten teams won by an average of at least 20", subtitle = "Outside Minnesota's four losses, it won eight games by an average margin of 29 points", caption = "Source: NCAA | By Shane Connuck") + 
+  theme_minimal() + 
+  theme(
+    plot.title = element_text(size = 16, face = "bold"),
+    axis.title = element_text(size = 8), 
+    plot.subtitle = element_text(size=10), 
+    panel.grid.minor = element_blank()
+  )
+```
+The biggest thing to keep in mind here is that this is now only including wins. So, any loss -- by 30 or by one -- isn't included anymore. And Ohio State and Michigan still find themselves at the top, but with the Buckeyes now at No. 1 and the 8-4 Golden Gophers popping in at No. 2. Down at the bottom, Northwestern's one win was by three points. Yikes.
+
+
+
+Let's get into specifics of what made this team have the fifth-highest-scoring offense in one of the nation's best conferences. Outside of those aforementioned contests against the Badgers and Nittany Lions, there was plenty to smile about for Maryland's offense. Starting at the running back position. Hemby, a redshirt freshman out of John Carroll, and power rusher Antwain Littleton brought plenty of life to the Terps' offense this season. Let's see how Maryland's running game compared to the conference.
+
+```{r}
+rush_yds <- bigten %>% 
+  group_by(TeamFull) %>% 
+  summarise(
+    SeasonRushYds = sum(RushingYds)
+    ) 
+```
+```{r}
+ggplot() + 
+  geom_bar(data=rush_yds, aes(x=reorder(TeamFull, SeasonRushYds), weight=SeasonRushYds)) + 
+  coord_flip() +
+  labs(title = "Michigan's run game was well out in front", subtitle = "Blake Corum led the Wolverines for the Big Ten lead")
+```
+
+
+
+
+While Hemby and Littleton were effective in their roles this season, overall, they usually weren't the ones carrying the offense downfield. Still, their efforts put Maryland's rushing ahead of Big Ten West champion Purdue. 
+
+It was indeed Big Ten champion Michigan, featuring dominant back and Fauquier County, Va., native Blake Corum, that finished well out in front. Coach Jim Harbaugh's squad eclipsed 3,000 rushing yards, which no other team in the conference came close to doing.
+
+Now, let's look at the passing game:
+
+```{r}
+pass_yds <- bigten %>% 
+  group_by(Team) %>% 
+  summarise(
+    SeasonPassYds = sum(PassingYds)
+    ) 
+```
+```{r}
+ggplot() + 
+  geom_bar(data=pass_yds, aes(x=reorder(Team, SeasonPassYds), weight=SeasonPassYds)) + 
+  coord_flip() +
+  labs(title = "Maryland threw for the third-most yards in the Big Ten")
+```
+
+This adds up -- Tagovailoa's "historic" numbers led the Terps' offense to finish with nearly 400 more passing yards than Michigan. They're in good company -- trailing only Purdue and Ohio State.
+
+This also explains a bit more that went into the Boilermakers' offense that assembled an eight-win season. Clearly, it scored a lot of points and passed the ball effectively this year.
+
+```{r}
+football %>% 
+  group_by(Conference, Team) %>% 
+  summarise(
+    SeasonRushingYards = sum(RushingYds),
+    SeasonPassingYards = sum(PassingYds),
+  ) %>% filter(Conference == "Big Ten Conference")
+```
+```{r}
+football %>% 
+  group_by(Conference, Team) %>% 
+  summarise(
+    SeasonRushingYards = sum(RushingYds),
+    SeasonPassingYards = sum(PassingYds),
+  ) %>% filter(Conference == "Big Ten Conference") -> yards
+```
+```{r}
+yards %>% 
+  pivot_longer(
+    cols=starts_with("Season"), 
+    names_to="Type", 
+    values_to="Yards") -> yardswide
+```
+```{r}
+ggplot() + 
+  geom_bar(data=yardswide, aes(x=reorder(Team, Yards), weight=Yards, fill=Type)) + 
+  coord_flip()
+```
+
+
+Now, the hope in football -- or any sport, for that matter -- is that a strong passing game and/or a strong rushing game will lead you to score more points, and ultimately win more games. These Big Ten teams, as we've explored, bring plenty of offense to the table. But how does that actually translate to wins -- compared against the national average?
+
+```{r}
+winlosslogs <- football %>% 
+  mutate(
+    wins = case_when(
+      grepl("W", Outcome) ~ 1, 
+      grepl("L", Outcome) ~ 0)
+)
+```
+
+```{r}
+winlosslogs %>% 
+  group_by(Team, Conference) %>% 
+  summarise(
+    TotalPlays = sum(OffensivePlays), 
+    TotalYards = sum(OffensiveYards), 
+    DefensivePlays = sum(DefPlays), 
+    DefensiveYards = sum(DefYards), 
+    TotalWins = sum(wins)) %>% 
+  mutate(
+    OffensiveYPP = TotalYards/TotalPlays, 
+    DefensiveYPP = DefensiveYards/DefensivePlays) -> ypp
+```
+
+```{r}
+bigten <- ypp %>% filter(Conference == "Big Ten Conference")
+```
+
+Let's get the Big Ten together here, and then calculate the national averages of offensive and defensive yards per play.
+
+```{r}
+ypp %>% 
+  ungroup() %>% 
+  summarise(
+    offense = mean(OffensiveYPP), 
+    defense = mean(DefensiveYPP)
+    )
+```
+```{r}
+ggplot() + 
+  geom_point(
+    data=ypp, 
+    aes(x=OffensiveYPP, y=DefensiveYPP, size=TotalWins), 
+    color="grey", 
+    alpha=.5) + 
+  geom_point(
+    data=bigten, 
+    aes(x=OffensiveYPP, y=DefensiveYPP, size=TotalWins), 
+    color="red") + 
+  geom_vline(xintercept = 5.720576) + 
+  geom_hline(yintercept = 5.54042)+
+  geom_text_repel(
+    data=bigten, 
+    aes(x=OffensiveYPP, y=DefensiveYPP, label=Team)
+  )+
+  labs(title="Was Maryland a top Big Ten team this year?", subtitle="The Terps scored more and allowed fewer points than most this season.", caption="Source: NCAA | By Shane Connuck")  + theme_minimal() + 
+  theme(
+    plot.title = element_text(size = 16, face = "bold"),
+    axis.title = element_text(size = 8), 
+    plot.subtitle = element_text(size=10), 
+    panel.grid.minor = element_blank()
+    )
+```
+
+Overall, I think it's the same thing we thought for the Terps' 2022 season -- they've moved into the upper half of Big Ten teams. They still haven't gotten that signature win over a top opponent. They still haven't achieved an eight-win season. But their second straight season going bowling also ended with their offense and defense being better than most other teams nationally and not terribly far off from their elite Big Ten competition.
+
